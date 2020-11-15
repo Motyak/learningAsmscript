@@ -1,0 +1,10 @@
+<textarea id="output" style="height: 100%; width: 100%" readonly></textarea>
+<script>
+loader.instantiateSync(wasmModule, imports)
+  .then(({ exports }) => {
+    const output = document.getElementById('output')
+    for (let i = 0; i <= 40; ++i) {
+      output.value += `fib(${i}) = ${exports.fib(i)}\n`
+    }
+  });
+</script>

@@ -1,4 +1,4 @@
 const assert = require("assert");
 const myModule = require("..");
-assert.equal(myModule.add(1, 2), 3);
+assert.strictEqual(myModule.fib(13), 233);
 console.log("ok");
