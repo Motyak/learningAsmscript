@@ -1,10 +1,23 @@
 <textarea id="output" style="height: 100%; width: 100%" readonly></textarea>
 <script>
-loader.instantiateSync(wasmModule, imports)
-  .then(({ exports }) => {
-    const output = document.getElementById('output')
-    for (let i = 0; i <= 40; ++i) {
-      output.value += `fib(${i}) = ${exports.fib(i)}\n`
-    }
-  });
+var importObject = {
+  env: {
+  'memoryBase': 0,
+  'tableBase': 0,
+  'memory': new WebAssembly.Memory({initial: 256}),
+  'table': new WebAssembly.Table({initial: 256, element: 'anyfunc'}),
+  abort: function(){},
+  }
+}
+fetch('build/optimized.wasm').then(response =>
+  response.arrayBuffer()
+).then(bytes =>
+  WebAssembly.instantiate(bytes, importObject)
+).then(results => {
+  // Prints the 40 first fibo numbers
+  const output = document.getElementById('output')
+  for (let i = 0; i <= 40; ++i) {
+    output.value += `fib(${i}) = ${results.instance.exports.fib(i)}\n`
+  }
+});
 </script>
